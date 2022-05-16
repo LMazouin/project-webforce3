@@ -15,14 +15,6 @@ app.prepare().then(() => {
   try {
     const server = express();
 
-    server.get("/", (req: Request, res: Response) => {
-      app.render(req, res, "/");
-    });
-
-    server.get("/favicon.ico", (req: Request, res: Response) => {
-      res.sendStatus(200);
-    });
-
     server.get("*", (req: IncomingMessage, res: ServerResponse) => {
       return handle(req, res);
     });
