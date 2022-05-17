@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import type { NextPage } from "next";
-import Menu from "../components/Menu";
+import Menu from "../components/lib/Menu";
 
 const Home: NextPage = () => {
   return (
