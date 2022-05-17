@@ -1,13 +1,11 @@
 import NextAuth from "next-auth";
-import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import clientPromise from "../../../utils/mongodb";
+import { CredentialsProvider } from "next-auth/providers";
 
 export default NextAuth({
-  providers: [],
+  providers: [CredentialsProvider({})],
   session: {
-    strategy: "database",
+    strategy: "jwt",
     maxAge: 60,
     updateAge: 20,
   },
-  adapter: MongoDBAdapter(clientPromise),
 });
