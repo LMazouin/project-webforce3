@@ -1,14 +1,16 @@
-import { Button, ThemeProvider } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import type { NextPage } from "next";
-import Head from "next/head";
+import Menu from "../components/Menu";
 
 const Home: NextPage = () => {
   return (
-    <>
-      <Button variant="contained" color="primary">
-        Bonjour
-      </Button>
-    </>
+    <Menu>
+      <Typography paragraph>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio repellendus autem praesentium enim fuga maxime
+        suscipit! Voluptatum repellendus eum dolorum eaque ex consequatur dicta? Dolore excepturi nisi aspernatur quo
+        quisquam!
+      </Typography>
+    </Menu>
   );
 };
 
