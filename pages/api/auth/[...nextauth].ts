@@ -1,8 +1,9 @@
-import NextAuth from "next-auth";
+import NextAuth, { Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { IUser, Users } from "../../../models/users";
 import { compare } from "bcrypt";
 import connectToMongoDB from "../../../utils/mongoose";
+import { JWT } from "next-auth/jwt";
 
 export default NextAuth({
   providers: [
@@ -32,15 +33,15 @@ export default NextAuth({
     maxAge: 60 * 10,
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: JWT; user?: any }): Promise<JWT> {
       if (user) {
         token.userId = user.userId;
         token.role = user.role;
       }
       return token;
     },
-    async session({ session, token }) {
-      session.role = token.role;
+    async session({ session, token }): Promise<Session> {
+      session.role = token.role || "visitor";
       return session;
     },
   },

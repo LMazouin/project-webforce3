@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       res.status(200).json({ message: "Votre compte a bien été créé." });
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
       res.statusCode = 500;
     }
   }
