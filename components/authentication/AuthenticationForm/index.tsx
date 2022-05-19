@@ -1,4 +1,5 @@
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
@@ -13,13 +14,14 @@ interface AuthenticationFormProps {
   toggleLoggedIn: () => void;
 }
 
-export default function AuthenticationForm(props: AuthenticationFormProps): JSX.Element {
+const AuthenticationForm: React.FC<AuthenticationFormProps> = (props: AuthenticationFormProps): JSX.Element => {
+  const router = useRouter();
   const [{ isLoading }, { create }] = useUsers({});
 
   const [{ values, errors, isValid }, { handleChange, handleSubmit }] = useForm<TValues>({
     initialValues: props.initialValues,
     validators: props.validators,
-    onSubmit: async function (event: React.MouseEvent<HTMLButtonElement>, newValues: TValues): Promise<void> {
+    onSubmit: async (event: React.MouseEvent<HTMLButtonElement>, newValues: TValues): Promise<void> => {
       if (props.isLoggedIn) {
         await signIn("credentials", {
           redirect: true,
@@ -28,13 +30,15 @@ export default function AuthenticationForm(props: AuthenticationFormProps): JSX.
           callbackUrl: "/",
         });
       } else {
-        await create<TValues>("/api/auth/signup", newValues);
-        await signIn("credentials", {
-          redirect: true,
-          email: newValues.email,
-          password: newValues.password,
-          callbackUrl: "/",
-        });
+        const isSuccess = await create<TValues>("/api/auth/signup", newValues);
+        if (isSuccess) {
+          await signIn("credentials", {
+            redirect: true,
+            email: newValues.email,
+            password: newValues.password,
+            callbackUrl: "/",
+          });
+        }
       }
     },
   });
@@ -92,4 +96,6 @@ export default function AuthenticationForm(props: AuthenticationFormProps): JSX.
       </Grid>
     </>
   );
-}
+};
+
+export default AuthenticationForm;

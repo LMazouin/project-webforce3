@@ -12,7 +12,7 @@ const PaperWrapper = styled(Paper)(({ theme }) => ({
 
 const initialValues: TValues = { email: "", password: "", passwordConfirmation: "" };
 
-export default function AuthenticationPaper(): JSX.Element {
+const AuthenticationPaper: React.FC = (): JSX.Element => {
   const [isLoggedIn, setLoggedIn] = useState<boolean>(true);
 
   function toggleLoggedIn(): void {
@@ -29,4 +29,6 @@ export default function AuthenticationPaper(): JSX.Element {
       />
     </PaperWrapper>
   );
-}
+};
+
+export default AuthenticationPaper;

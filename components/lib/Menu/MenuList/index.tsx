@@ -35,4 +35,5 @@ const MenuList: React.FC<MenuListProps> = (props: MenuListProps): JSX.Element =>
     </div>
   );
 };
+
 export default MenuList;
