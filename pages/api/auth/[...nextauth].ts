@@ -17,9 +17,9 @@ export default NextAuth({
         await connectToMongoDB();
         const user: IUser = await Users.findOne({ email: credentials.email }).lean();
         if (!user) {
+          console.log("user not in database");
           throw new Error("Ce compte n'existe pas.");
         }
-        console.log(user);
         const match = await compare(credentials.password, user.password);
         if (!match) {
           throw new Error("Votre mot passe n'est pas correct.");

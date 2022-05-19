@@ -17,9 +17,6 @@ const TopBar: React.FC<TopBarProps> = (props: TopBarProps): JSX.Element => {
     await router.push({ pathname: "/authentication" });
   };
 
-
-  
-  
   const disconnect: React.MouseEventHandler = async (): Promise<void> => {
     await signOut();
     await router.push({ pathname: "/authentication" });

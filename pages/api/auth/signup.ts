@@ -18,11 +18,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       await connectToMongoDB();
 
-      createUser(req.body);
+      await createUser(req.body);
+      console.log("user created");
 
       res.status(200).json({ message: "Votre compte a bien été créé." });
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
       res.statusCode = 500;
     }
   }
