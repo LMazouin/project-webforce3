@@ -1,14 +1,6 @@
 import React, { useState } from "react";
 import { has } from "../utils/lodash";
 
-interface IValidators<T> {
-  [key: string]: (value: any, values?: T) => string;
-}
-
-interface IErrors {
-  [key: string]: string;
-}
-
 interface FormArgs<TValues> {
   validators: IValidators<TValues>;
   initialValues: TValues;
@@ -27,16 +19,15 @@ interface FormDispatch {
 }
 
 export default function useForm<TValues>(args: FormArgs<TValues>): [FormState<TValues>, FormDispatch] {
-  const { initialValues, validators, onSubmit } = args;
-  const [values, setValues] = useState<TValues>(initialValues);
+  const [values, setValues] = useState<TValues>(args.initialValues);
   const [errors, setErrors] = useState<IErrors>({});
 
   function hasValidator(name: string): boolean {
-    return has(validators, name);
+    return has(args.validators, name);
   }
 
   function validateField(name: string, value: any): string {
-    return hasValidator(name) ? validators[name](value, values) : "";
+    return hasValidator(name) ? args.validators[name](value, values) : "";
   }
 
   function validateAll(valuesToValidate: { [key: string]: any }, allErrors: IErrors = {}): IErrors | boolean {
@@ -63,7 +54,7 @@ export default function useForm<TValues>(args: FormArgs<TValues>): [FormState<TV
   function handleSubmit(event: React.MouseEvent<HTMLButtonElement>): void {
     event.preventDefault();
     if (validateAll(values) === true) {
-      onSubmit(event, values);
+      args.onSubmit(event, values);
     }
   }
 

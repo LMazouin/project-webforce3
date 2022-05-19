@@ -1,23 +1,22 @@
 import { List, ListItem, ListItemButton, ListItemText, Toolbar } from "@mui/material";
 
 interface MenuListProps {
-  menuItems: string[];
+  menuItems: IMenuItem[];
 }
 
-export default function MenuList(props: MenuListProps): JSX.Element {
-  const { menuItems } = props;
-  return (
-    <div>
-      <Toolbar />
-      <List>
-        {menuItems.map((item: string) => (
-          <ListItem key={item}>
-            <ListItemButton>
-              <ListItemText primary={item} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
-}
+const MenuList: React.FC<MenuListProps> = (props: MenuListProps): JSX.Element => (
+  <div>
+    <Toolbar />
+    <List>
+      {props.menuItems.map((item: IMenuItem) => (
+        <ListItem key={item.label}>
+          <ListItemButton onClick={item.onClick}>
+            <ListItemText primary={item.label} />
+          </ListItemButton>
+        </ListItem>
+      ))}
+    </List>
+  </div>
+);
+
+export default MenuList;

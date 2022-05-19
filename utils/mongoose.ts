@@ -1,10 +1,31 @@
-import "dotenv/config";
-import logger from "morgan";
-import mongoose, { Connection } from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 
-export function connectToMongoDB(): Connection {
-  mongoose.connect(process.env.MONGODB_URI);
-  mongoose.connection
-    .on("connected", console.info.bind(logger, "CONNECTED TO MONGODB"))
-    .on("reconnected", console.info.bind(logger, "RECONNECTED TO MONGODB"));
+export default async function connectToMongoDB(): Promise<Mongoose> {
+  if (!process.env.MONGODB_URI) {
+    throw new Error("MONGODB_URI ENVEIRONMENT VARIABLE NOT SET");
+  }
+
+  const uri: string = process.env.MONGODB_URI;
+
+  let globalWithMongoose = global as typeof globalThis & {
+    mongoose: { connection: Mongoose | null; promise: Promise<Mongoose> | null };
+  };
+
+  let cached = globalWithMongoose.mongoose;
+
+  if (!cached) {
+    cached = globalWithMongoose.mongoose = { connection: null, promise: null };
+  }
+  if (cached.connection) {
+    return cached.connection;
+  }
+
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(uri).then((mongo: Mongoose) => {
+      return mongo;
+    });
+  }
+
+  cached.connection = await cached.promise;
+  return cached.connection;
 }

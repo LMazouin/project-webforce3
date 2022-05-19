@@ -3,7 +3,7 @@ import { DRAWER_WIDTH } from "../constants";
 import MenuList from "../MenuList";
 
 interface PermanentDrawerProps {
-  menuItems: string[];
+  menuItems: IMenuItem[];
 }
 
 const DrawerWrapper = styled(Drawer)({
@@ -13,11 +13,10 @@ const DrawerWrapper = styled(Drawer)({
   },
 });
 
-export default function PermanentDrawer(props: PermanentDrawerProps): JSX.Element {
-  const { menuItems } = props;
-  return (
-    <DrawerWrapper variant="permanent" sx={{ display: { xs: "none", sm: "block" } }} open>
-      <MenuList menuItems={menuItems} />
-    </DrawerWrapper>
-  );
-}
+const PermanentDrawer: React.FC<PermanentDrawerProps> = (props: PermanentDrawerProps): JSX.Element => (
+  <DrawerWrapper variant="permanent" sx={{ display: { xs: "none", sm: "block" } }} open>
+    <MenuList menuItems={props.menuItems} />
+  </DrawerWrapper>
+);
+
+export default PermanentDrawer;
