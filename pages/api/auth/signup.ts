@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { IUser, Users, Role } from "../../../models/users";
+import { IUser, Users } from "../../../models/users";
 import { hash } from "bcrypt";
 import connectToMongoDB from "../../../utils/mongoose";
 
@@ -9,7 +9,7 @@ async function createUser(body: IUser): Promise<void> {
   if (user) {
     throw new Error("Cet email est déjà utilisé.");
   }
-  await Users.create({ ...body, password: hashedPassword, roles: [Role.USER] });
+  await Users.create({ ...body, password: hashedPassword, role: "user" });
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

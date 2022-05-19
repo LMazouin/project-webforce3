@@ -23,7 +23,7 @@ export default NextAuth({
         if (!match) {
           throw new Error("Votre mot passe n'est pas correct.");
         }
-        return { email: user.email, userId: user._id, roles: user.roles };
+        return { email: user.email, userId: user._id, role: user.role };
       },
     }),
   ],
@@ -35,9 +35,13 @@ export default NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.userId = user.userId;
-        token.roles = user.roles;
+        token.role = user.role;
       }
       return token;
+    },
+    async session({ session, token }) {
+      session.role = token.role;
+      return session;
     },
   },
 });

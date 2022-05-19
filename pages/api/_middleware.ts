@@ -5,7 +5,7 @@ const middleware: NextMiddleware = async (req: NextRequest, event: NextFetchEven
   try {
     const { origin } = req.nextUrl;
     const token = await getToken({ req });
-    console.log("token", token);
+    console.log({ token });
   } catch (error) {
     console.error(error);
   }

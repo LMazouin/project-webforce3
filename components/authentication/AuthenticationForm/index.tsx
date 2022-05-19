@@ -21,7 +21,7 @@ export default function AuthenticationForm(props: AuthenticationFormProps): JSX.
     validators: props.validators,
     onSubmit: async function (event: React.MouseEvent<HTMLButtonElement>, newValues: TValues): Promise<void> {
       if (props.isLoggedIn) {
-        const result = await signIn("credentials", {
+        await signIn("credentials", {
           redirect: true,
           email: newValues.email,
           password: newValues.password,
@@ -29,11 +29,15 @@ export default function AuthenticationForm(props: AuthenticationFormProps): JSX.
         });
       } else {
         await create<TValues>("/api/auth/signup", newValues);
+        await signIn("credentials", {
+          redirect: true,
+          email: newValues.email,
+          password: newValues.password,
+          callbackUrl: "/",
+        });
       }
     },
   });
-
-  console.log("errors", errors);
 
   return (
     <>

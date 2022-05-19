@@ -4,7 +4,7 @@ export interface IUser {
   _id: Schema.Types.ObjectId;
   email: string;
   password: string;
-  roles: Role[];
+  role: Role;
   deleted: boolean;
   createdAt: Date;
   updateAt: Date;
@@ -23,12 +23,10 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: true,
     },
-    roles: [
-      {
-        type: String,
-        enum: [Role.ADMIN, Role.USER],
-      },
-    ],
+    role: {
+      type: String,
+      enum: ["admin", "user"],
+    },
     deleted: {
       type: Boolean,
       default: false,

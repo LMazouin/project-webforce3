@@ -1,7 +1,4 @@
-enum Role {
-  ADMIN = "admin",
-  USER = "user",
-}
+type Role = "admin" | "user";
 
 interface IErrors {
   [key: string]: string;

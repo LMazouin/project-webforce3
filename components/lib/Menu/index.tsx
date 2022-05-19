@@ -1,32 +1,24 @@
-import { Box, Toolbar } from "@mui/material";
 import { useState } from "react";
-
+import { Box, Toolbar } from "@mui/material";
 import { DRAWER_WIDTH } from "./constants";
 import TopBar from "./TopBar";
 import TemporaryDrawer from "./TemporaryDrawer";
 import PermanentDrawer from "./PermanentDrawer";
-import { useRouter } from "next/router";
 
 interface MenuProps {
   children: JSX.Element;
 }
 
 export default function Menu(props: MenuProps): JSX.Element {
-  const router = useRouter();
-
   const [open, setOpen] = useState<boolean>(false);
 
   const handleMenuToggle = (): void => {
     setOpen(!open);
   };
 
-  const navigateTo = (path: string): void => {
-    router.push({ pathname: path }, undefined, { scroll: false, shallow: true });
-  };
-
-  const menuItems = [
-    { label: "Accueil", path: "/", authorizations: [Role.ADMIN, Role.USER] },
-    { label: "Configuration", path: "/", authorizations: [Role.ADMIN] },
+  const menuItems: IMenuItem[] = [
+    { label: "Accueil", path: "/", authorizations: ["admin", "user"] },
+    { label: "Configuration", path: "/settings", authorizations: ["admin"] },
   ];
 
   return (

@@ -5,7 +5,7 @@ import MenuList from "../MenuList";
 interface TemporaryDrawerProps {
   open: boolean;
   handleMenuToggle: () => void;
-  menuItems: string[];
+  menuItems: IMenuItem[];
 }
 
 const DrawerWrapper = styled(Drawer)({

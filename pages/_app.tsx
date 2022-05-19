@@ -1,8 +1,8 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import CssBaseline from "@mui/material/CssBaseline";
 import { SessionProvider } from "next-auth/react";
 import { FunctionComponent } from "react";
+import CssBaseline from "@mui/material/CssBaseline";
 
 const App: FunctionComponent<AppProps> = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <>

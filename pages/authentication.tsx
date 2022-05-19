@@ -6,12 +6,10 @@ export const getServerSideProps: GetServerSideProps = async (context): Promise<{
   return { props: {} };
 };
 
-const Authentication: NextPage = () => {
-  return (
-    <Container>
-      <AuthenticationPaper />
-    </Container>
-  );
-};
+const Authentication: NextPage = (): JSX.Element => (
+  <Container>
+    <AuthenticationPaper />
+  </Container>
+);
 
 export default Authentication;
