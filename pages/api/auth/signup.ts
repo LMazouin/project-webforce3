@@ -4,6 +4,9 @@ import { hash } from "bcrypt";
 import connectToMongoDB from "../../../utils/mongoose";
 
 async function createUser(body: IUser): Promise<void> {
+  if (!body.password) {
+    throw new Error("PASSWORD NOT PROVIDED");
+  }
   const hashedPassword = await hash(body.password, 10);
   const user: IUser = await Users.findOne({ email: body.email, deleted: false }).lean();
   if (user) {

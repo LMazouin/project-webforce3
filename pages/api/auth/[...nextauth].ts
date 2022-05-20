@@ -20,7 +20,7 @@ export default NextAuth({
           console.log("user not in database");
           throw new Error("Ce compte n'existe pas.");
         }
-        const match = await compare(credentials.password, user.password);
+        const match = await compare(credentials.password, user.password || "");
         if (!match) {
           throw new Error("Votre mot passe n'est pas correct.");
         }
