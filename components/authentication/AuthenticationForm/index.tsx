@@ -5,10 +5,11 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import useForm from "../../../hooks/useForm";
 import useUsers from "../../../hooks/useUsers";
+import { IUser } from "../../../models/users";
 
 interface AuthenticationFormProps {
-  initialValues: TValues;
-  validators: IValidators<TValues>;
+  initialValues: IUser;
+  validators: IValidators<IUser>;
 
   isLoggedIn: boolean;
   toggleLoggedIn: () => void;
@@ -16,12 +17,12 @@ interface AuthenticationFormProps {
 
 const AuthenticationForm: React.FC<AuthenticationFormProps> = (props: AuthenticationFormProps): JSX.Element => {
   const router = useRouter();
-  const [{ isLoading }, { create }] = useUsers({});
+  const [{ isLoading }, { create }] = useUsers<IUser>({});
 
-  const [{ values, errors, isValid }, { handleChange, handleSubmit }] = useForm<TValues>({
+  const [{ values, errors, isValid }, { handleChange, handleSubmit }] = useForm<IUser>({
     initialValues: props.initialValues,
     validators: props.validators,
-    onSubmit: async (event: React.MouseEvent<HTMLButtonElement>, newValues: TValues): Promise<void> => {
+    onSubmit: async (event: React.MouseEvent<HTMLButtonElement>, newValues: IUser): Promise<void> => {
       if (props.isLoggedIn) {
         await signIn("credentials", {
           redirect: true,
@@ -30,7 +31,7 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = (props: Authentica
           callbackUrl: "/",
         });
       } else {
-        const isSuccess = await create<TValues>("/api/auth/signup", newValues);
+        const isSuccess = await create("/api/auth/signup", newValues);
         if (isSuccess) {
           await signIn("credentials", {
             redirect: true,
@@ -90,9 +91,11 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = (props: Authentica
             {props.isLoggedIn ? "Se connecter" : "Créer un compte"}
           </Button>
         </Grid>
-        <Button variant="text" onClick={props.toggleLoggedIn}>
-          {props.isLoggedIn ? "Pas ce compte? Cliquez ici!" : "Se connecter"}
-        </Button>
+        <Grid item xs={12}>
+          <Button variant="text" onClick={props.toggleLoggedIn}>
+            {props.isLoggedIn ? "Pas ce compte? Cliquez ici!" : "Se connecter"}
+          </Button>
+        </Grid>
       </Grid>
     </>
   );

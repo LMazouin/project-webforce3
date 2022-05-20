@@ -11,7 +11,9 @@ interface TopBarProps {
 
 const TopBar: React.FC<TopBarProps> = (props: TopBarProps): JSX.Element => {
   const router = useRouter();
-  const { status } = useSession();
+  const { status, data } = useSession();
+
+  const userEmail = data ? data.token.email : "";
 
   const connect = async (): Promise<void> => {
     await router.push({ pathname: "/authentication" });
@@ -21,8 +23,6 @@ const TopBar: React.FC<TopBarProps> = (props: TopBarProps): JSX.Element => {
     await signOut();
     await router.push({ pathname: "/authentication" });
   };
-
-  console.log({ status });
 
   return (
     <AppBar position="fixed" sx={{ width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` }, ml: { sm: `${DRAWER_WIDTH}px` } }}>
@@ -39,11 +39,10 @@ const TopBar: React.FC<TopBarProps> = (props: TopBarProps): JSX.Element => {
         <Typography variant="h6" noWrap component="div">
           Menu
         </Typography>
-        <Button
-          variant="text"
-          sx={{ color: "white", marginLeft: "auto" }}
-          onClick={status === "authenticated" ? disconnect : connect}
-        >
+        <Typography noWrap component="div" marginLeft="auto">
+          {userEmail}
+        </Typography>
+        <Button variant="text" sx={{ color: "white" }} onClick={status === "authenticated" ? disconnect : connect}>
           {status === "authenticated" ? "Se déconnecter" : "Se connecter"}
         </Button>
       </Toolbar>

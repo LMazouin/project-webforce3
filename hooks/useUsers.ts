@@ -1,50 +1,80 @@
-import { useReducer } from "react";
-import { IUser } from "../models/users";
+import { ReducerWithoutAction, useReducer } from "react";
+import { usePage } from "../contexts/pageContext";
 
-enum UsersActionTypes {
+enum ActionType {
   START,
   END,
+  GET,
 }
 
-interface UsersAction {
-  type: UsersActionTypes;
-  users?: IUser[];
+interface Action<T> {
+  type: ActionType;
+  data?: Array<T>;
 }
 
-interface UsersState {
+interface State<T> {
   isLoading: boolean;
-  users: IUser[];
+  data?: Array<T>;
 }
 
-interface UsersArgs {
-  initialUsers?: IUser[];
-  initialFilters?: { [key: string]: any };
+interface Args<T, F> {
+  initialData?: Array<T>;
+  initialFilters?: F;
 }
 
-interface UsersFunctions {
-  create: <T>(url: string, body: T) => Promise<boolean>;
+interface Functions<T, F> {
+  getData: (url: string, filters?: F) => Promise<boolean>;
+  create: (url: string, body: T) => Promise<boolean>;
 }
 
-function getInitialState(initialUsers: IUser[] = []): UsersState {
-  return { isLoading: false, users: initialUsers };
-}
+const getInitialState = <T>(initialData: Array<T> = []): State<T> => {
+  return { isLoading: false, data: initialData };
+};
 
-function reducer(state: UsersState, action: UsersAction): UsersState {
-  switch (action.type) {
-    case UsersActionTypes.START:
-      return { ...state, isLoading: true };
-    case UsersActionTypes.END:
-      return { ...state, isLoading: false };
-    default:
-      return state;
-  }
-}
+const createReducer =
+  <T>() =>
+  (state: State<T>, action: Action<T>): State<T> => {
+    switch (action.type) {
+      case ActionType.START:
+        return { ...state, isLoading: true };
+      case ActionType.END:
+        return { ...state, isLoading: false };
+      case ActionType.GET:
+        return { ...state, isLoading: false, data: action.data };
+      default:
+        return state;
+    }
+  };
 
-export default function useUsers(args: UsersArgs): [UsersState, UsersFunctions] {
-  const [state, dispatch] = useReducer(reducer, args.initialUsers, getInitialState);
+const useData = <T, F = {}>(args: Args<T, F>): [State<T>, Functions<T, F>] => {
+  const reducer = createReducer<T>();
+  const [state, dispatch] = useReducer(reducer, args.initialData, getInitialState);
 
-  async function create<T>(url: string, body: T): Promise<boolean> {
-    dispatch({ type: UsersActionTypes.START });
+  const { token } = usePage();
+
+  const getData = async (url: string, filters?: F): Promise<boolean> => {
+    dispatch({ type: ActionType.START });
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: { "Content-Type": "application/json", "x-access-token": token },
+      });
+      if (response.ok) {
+        const { data } = await response.json();
+        dispatch({ type: ActionType.GET, data });
+        return true;
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+    }
+    dispatch({ type: ActionType.END });
+    return false;
+  };
+
+  const create = async (url: string, body: T): Promise<boolean> => {
+    dispatch({ type: ActionType.START });
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -55,11 +85,15 @@ export default function useUsers(args: UsersArgs): [UsersState, UsersFunctions] 
         return true;
       }
     } catch (error) {
-      console.error("ERROR");
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
     }
-    dispatch({ type: UsersActionTypes.END });
+    dispatch({ type: ActionType.END });
     return false;
-  }
+  };
 
-  return [state, { create }];
-}
+  return [state, { create, getData }];
+};
+
+export default useData;

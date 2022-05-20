@@ -3,6 +3,7 @@ import Head from "next/head";
 import { SessionProvider } from "next-auth/react";
 import { FunctionComponent } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
+import { PageProvider } from "../contexts/pageContext";
 
 const App: FunctionComponent<AppProps> = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <>
@@ -14,7 +15,9 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps: { session, ...
     </Head>
     <CssBaseline />
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <PageProvider value={pageProps}>
+        <Component {...pageProps} />
+      </PageProvider>
     </SessionProvider>
   </>
 );

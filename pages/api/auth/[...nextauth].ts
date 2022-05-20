@@ -41,7 +41,7 @@ export default NextAuth({
       return token;
     },
     async session({ session, token }): Promise<Session> {
-      session.role = token.role || "visitor";
+      session.token = token;
       return session;
     },
   },

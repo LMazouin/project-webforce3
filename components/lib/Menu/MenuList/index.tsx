@@ -10,7 +10,9 @@ const MenuList: React.FC<MenuListProps> = (props: MenuListProps): JSX.Element =>
   const router = useRouter();
   const { data, status } = useSession();
 
-  const role = data ? data.role : "visitor";
+  console.log({ data });
+
+  const role = (data && data.token?.role) || "visitor";
 
   const isAuthenticated = status === "authenticated";
 

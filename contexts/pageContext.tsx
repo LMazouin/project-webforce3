@@ -6,10 +6,10 @@ interface PageProviderProps<T> {
 }
 
 export interface PageContent {
-  decodedToken: { [key: string]: any };
+  token: string;
 }
 
-const PageContext: Context<PageContent> = createContext({ decodedToken: {} });
+const PageContext: Context<PageContent> = createContext({ token: "" });
 
 export const PageProvider = (props: PageProviderProps<PageContent>) => (
   <PageContext.Provider value={props.value}>{props.children}</PageContext.Provider>

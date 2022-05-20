@@ -6,7 +6,7 @@ import TemporaryDrawer from "./TemporaryDrawer";
 import PermanentDrawer from "./PermanentDrawer";
 
 interface MenuProps {
-  children: JSX.Element;
+  children: JSX.Element[];
 }
 
 export default function Menu(props: MenuProps): JSX.Element {

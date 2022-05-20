@@ -1,4 +1,6 @@
-const validators: IValidators<TValues> = {
+import { IUser } from "../../models/users";
+
+const validators: IValidators<IUser> = {
   email: (value: string) => {
     if (value.length < 1) {
       return "Veuillez saisir un email";
@@ -14,7 +16,7 @@ const validators: IValidators<TValues> = {
     }
     return "";
   },
-  passwordConfirmation: (value: string, values?: TValues) => {
+  passwordConfirmation: (value: string, values?: IUser) => {
     if (value.length < 1) {
       return "Veuillez saisir un mot de passe";
     }
