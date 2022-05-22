@@ -1,5 +1,5 @@
 import { Drawer } from "@mui/material";
-import {styled} from "@mui/system";
+import { styled } from "@mui/system";
 import { DRAWER_WIDTH } from "../constants";
 import SideMenuList from "../SideMenuList";
 

@@ -40,7 +40,7 @@ export default NextAuth({
       }
       return token;
     },
-    session: async ({session, token }:{ session: Session, token: JWT }) => {
+    session: async ({ session, token }: { session: Session; token: JWT }) => {
       session.token = token;
       return session;
     },
