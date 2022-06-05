@@ -9,11 +9,13 @@ interface SideMenuProps {
   menuItems: IMenuItem[];
 }
 
-const SideMenu: React.FC<SideMenuProps> = (props: SideMenuProps): JSX.Element => (
-  <Box component="nav" sx={{ width: { sm: DRAWER_WIDTH }, flexShrink: { sm: 0 } }} aria-label="navigation">
-    <TemporaryDrawer open={props.open} handleMenuToggle={props.handleMenuToggle} menuItems={props.menuItems} />
-    <PermanentDrawer menuItems={props.menuItems} />
-  </Box>
-);
+export default function SideMenu(props: SideMenuProps): JSX.Element {
+  const { open, handleMenuToggle, menuItems } = props;
 
-export default SideMenu;
+  return (
+    <Box component="nav" sx={{ width: { sm: DRAWER_WIDTH }, flexShrink: { sm: 0 } }} aria-label="navigation">
+      <TemporaryDrawer open={open} handleMenuToggle={handleMenuToggle} menuItems={menuItems} />
+      <PermanentDrawer menuItems={menuItems} />
+    </Box>
+  );
+}

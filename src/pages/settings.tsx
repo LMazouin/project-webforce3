@@ -1,6 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
 import Button from "@mui/material/Button";
-import type { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
+import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { getSession } from "next-auth/react";
 import { useEffect } from "react";
 import Layout from "../components/lib/Layout";
@@ -10,14 +10,15 @@ import { IUser } from "../models/users";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   const session = await getSession(context);
-  if (!session) {
-    return { redirect: { permanent: false, destination: "/authentication" } };
-  }
+
+  if (!session) return { redirect: { permanent: false, destination: "/authentication" } };
+
   return { props: {} };
 };
 
-const Settings: NextPage = (): JSX.Element => {
+export default function Settings(): JSX.Element {
   const [state, { getData }] = useData<IUser>({ initialData: [] });
+
   useEffect(() => {
     getData("/api/users");
   }, []);
@@ -30,6 +31,4 @@ const Settings: NextPage = (): JSX.Element => {
       <UserTable users={state.data || []} isLoading={state.isLoading} />
     </Layout>
   );
-};
-
-export default Settings;
+}

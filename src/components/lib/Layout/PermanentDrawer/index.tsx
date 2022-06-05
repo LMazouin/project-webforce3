@@ -14,10 +14,11 @@ const DrawerWrapper = styled(Drawer)({
   },
 });
 
-const PermanentDrawer: React.FC<PermanentDrawerProps> = (props: PermanentDrawerProps): JSX.Element => (
-  <DrawerWrapper variant="permanent" sx={{ display: { xs: "none", sm: "block" } }} open>
-    <SideMenuList menuItems={props.menuItems} />
-  </DrawerWrapper>
-);
-
-export default PermanentDrawer;
+export default function PermanentDrawer(props: PermanentDrawerProps): JSX.Element {
+  const { menuItems } = props;
+  return (
+    <DrawerWrapper variant="permanent" sx={{ display: { xs: "none", sm: "block" } }} open>
+      <SideMenuList menuItems={menuItems} />
+    </DrawerWrapper>
+  );
+}

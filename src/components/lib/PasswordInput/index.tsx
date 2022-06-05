@@ -1,17 +1,17 @@
 import { Key, Visibility, VisibilityOff } from "@mui/icons-material";
 import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
-import { useState } from "react";
+import { ChangeEventHandler, useState } from "react";
 
 interface PasswordInputProps {
   label: string;
   name: string;
   value: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onChange: ChangeEventHandler<HTMLInputElement>;
   error?: boolean;
   helperText?: string;
 }
 
-const PasswordInput: React.FC<PasswordInputProps> = (props: PasswordInputProps): JSX.Element => {
+export default function PasswordInput(props: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleClickShowPassword: React.MouseEventHandler<HTMLButtonElement> = () =>
@@ -21,16 +21,18 @@ const PasswordInput: React.FC<PasswordInputProps> = (props: PasswordInputProps):
     event: React.MouseEvent<HTMLButtonElement>
   ) => event.preventDefault();
 
+  const { label, name, value, onChange, error, helperText } = props;
+
   return (
     <FormControl fullWidth>
-      <InputLabel>{props.label}</InputLabel>
+      <InputLabel>{label}</InputLabel>
       <OutlinedInput
-        label={props.label}
-        name={props.name}
+        label={label}
+        name={name}
         type={showPassword ? "text" : "password"}
-        value={props.value}
-        onChange={props.onChange}
-        error={props.error}
+        value={value}
+        onChange={onChange}
+        error={error}
         endAdornment={
           <InputAdornment position="end">
             <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} edge="end">
@@ -44,9 +46,12 @@ const PasswordInput: React.FC<PasswordInputProps> = (props: PasswordInputProps):
           </InputAdornment>
         }
       />
-      <FormHelperText>{props.helperText}</FormHelperText>
+      <FormHelperText>{helperText}</FormHelperText>
     </FormControl>
   );
-};
+}
 
-export default PasswordInput;
+PasswordInput.defaultProps = {
+  error: false,
+  helperText: "",
+};

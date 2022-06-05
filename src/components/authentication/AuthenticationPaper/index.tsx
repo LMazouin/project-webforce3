@@ -1,7 +1,6 @@
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import styled from "@mui/system/styled";
-import { useState } from "react";
+import { Paper, Typography } from "@mui/material";
+import { styled } from "@mui/system";
+import { MouseEventHandler, useState } from "react";
 import { IUser } from "../../../models/users";
 import AuthenticationForm from "../AuthenticationForm";
 import validators from "../validators";
@@ -14,12 +13,12 @@ const PaperWrapper = styled(Paper)(({ theme }) => ({
 
 const initialValues: IUser = { email: "", password: "", passwordConfirmation: "" };
 
-const AuthenticationPaper: React.FC = (): JSX.Element => {
+export default function AuthenticationPaper(): JSX.Element {
   const [isLoggedIn, setLoggedIn] = useState<boolean>(true);
 
-  function toggleLoggedIn(): void {
+  const toggleLoggedIn: MouseEventHandler<HTMLButtonElement> = (): void => {
     setLoggedIn((previousState) => !previousState);
-  }
+  };
 
   return (
     <PaperWrapper>
@@ -34,6 +33,4 @@ const AuthenticationPaper: React.FC = (): JSX.Element => {
       />
     </PaperWrapper>
   );
-};
-
-export default AuthenticationPaper;
+}

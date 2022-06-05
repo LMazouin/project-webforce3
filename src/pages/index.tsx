@@ -1,7 +1,7 @@
-import type { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
+import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { Typography } from "@mui/material";
-import Layout from "../components/lib/Layout";
 import { getSession } from "next-auth/react";
+import Layout from "../components/lib/Layout";
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   const session = await getSession(context);
@@ -13,14 +13,14 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   return { props: {} };
 };
 
-const Home: NextPage = (): JSX.Element => (
-  <Layout>
-    <Typography paragraph>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio repellendus autem praesentium enim fuga maxime
-      suscipit! Voluptatum repellendus eum dolorum eaque ex consequatur dicta? Dolore excepturi nisi aspernatur quo
-      quisquam!
-    </Typography>
-  </Layout>
-);
-
-export default Home;
+export default function Home(): JSX.Element {
+  return (
+    <Layout>
+      <Typography paragraph>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio repellendus autem praesentium enim fuga maxime
+        suscipit! Voluptatum repellendus eum dolorum eaque ex consequatur dicta? Dolore excepturi nisi aspernatur quo
+        quisquam!
+      </Typography>
+    </Layout>
+  );
+}

@@ -6,16 +6,19 @@ interface SideMenuListProps {
   menuItems: IMenuItem[];
 }
 
-const SideMenuList: React.FC<SideMenuListProps> = (props: SideMenuListProps): JSX.Element => {
+export default function SideMenuList(props: SideMenuListProps): JSX.Element {
   const router = useRouter();
   const { data } = useSession();
+
   const role = (data && data.token?.role) || "visitor";
+
+  const { menuItems } = props;
 
   return (
     <div>
       <Toolbar />
       <List>
-        {props.menuItems
+        {menuItems
           .filter((item) => item.authorizations.includes(role))
           .map((item) => (
             <ListItem key={item.label}>
@@ -31,6 +34,4 @@ const SideMenuList: React.FC<SideMenuListProps> = (props: SideMenuListProps): JS
       </List>
     </div>
   );
-};
-
-export default SideMenuList;
+}

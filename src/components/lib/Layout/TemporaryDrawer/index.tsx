@@ -16,7 +16,7 @@ const DrawerWrapper = styled(Drawer)({
   },
 });
 
-const TemporaryDrawer: React.FC<TemporaryDrawerProps> = (props: TemporaryDrawerProps): JSX.Element => {
+export default function TemporaryDrawer(props: TemporaryDrawerProps): JSX.Element {
   const { open, handleMenuToggle, menuItems } = props;
   return (
     <DrawerWrapper
@@ -29,6 +29,4 @@ const TemporaryDrawer: React.FC<TemporaryDrawerProps> = (props: TemporaryDrawerP
       <SideMenuList menuItems={menuItems} />
     </DrawerWrapper>
   );
-};
-
-export default TemporaryDrawer;
+}

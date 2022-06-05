@@ -1,5 +1,6 @@
 import { Button, CircularProgress, Grid } from "@mui/material";
 import { signIn } from "next-auth/react";
+import { MouseEvent, MouseEventHandler } from "react";
 import useForm from "../../../hooks/useForm";
 import useUsers from "../../../hooks/useUsers";
 import { IUser } from "../../../models/users";
@@ -9,19 +10,20 @@ import TextInput from "../../lib/TextInput";
 interface AuthenticationFormProps {
   initialValues: IUser;
   validators: IValidators<IUser>;
-
   isLoggedIn: boolean;
-  toggleLoggedIn: () => void;
+  toggleLoggedIn: MouseEventHandler;
 }
 
-const AuthenticationForm: React.FC<AuthenticationFormProps> = (props: AuthenticationFormProps): JSX.Element => {
+export default function AuthenticationForm(props: AuthenticationFormProps): JSX.Element {
   const [{ isLoading }, { create }] = useUsers<IUser>({});
 
+  const { initialValues, validators, isLoggedIn, toggleLoggedIn } = props;
+
   const [{ values, errors, isValid }, { handleChange, handleSubmit }] = useForm<IUser>({
-    initialValues: props.initialValues,
-    validators: props.validators,
-    onSubmit: async (event: React.MouseEvent<HTMLButtonElement>, newValues: IUser): Promise<void> => {
-      if (props.isLoggedIn) {
+    initialValues,
+    validators,
+    onSubmit: async (event: MouseEvent<HTMLButtonElement>, newValues: IUser): Promise<void> => {
+      if (isLoggedIn) {
         await signIn("credentials", {
           redirect: true,
           email: newValues.email,
@@ -65,7 +67,7 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = (props: Authentica
             helperText={errors.password}
           />
         </Grid>
-        {!props.isLoggedIn && (
+        {!isLoggedIn && (
           <Grid item xs={12}>
             <PasswordInput
               name="passwordConfirmation"
@@ -81,12 +83,12 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = (props: Authentica
       <Grid container spacing={3} marginTop={3}>
         <Grid item xs={12}>
           <Button variant="contained" fullWidth onClick={handleSubmit} disabled={!isValid}>
-            {props.isLoggedIn ? "Se connecter" : "Créer un compte"}
+            {isLoggedIn ? "Se connecter" : "Créer un compte"}
           </Button>
         </Grid>
         <Grid item xs={12}>
-          <Button variant="text" onClick={props.toggleLoggedIn}>
-            {props.isLoggedIn ? "Pas ce compte? Cliquez ici!" : "Se connecter"}
+          <Button variant="text" onClick={toggleLoggedIn}>
+            {isLoggedIn ? "Pas ce compte? Cliquez ici!" : "Se connecter"}
           </Button>
         </Grid>
         <Grid item xs={12}>
@@ -95,6 +97,4 @@ const AuthenticationForm: React.FC<AuthenticationFormProps> = (props: Authentica
       </Grid>
     </>
   );
-};
-
-export default AuthenticationForm;
+}

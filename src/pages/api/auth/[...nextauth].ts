@@ -5,44 +5,62 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { IUser, Users } from "../../../models/users";
 import connectToMongoDB from "../../../utils/mongoose";
 
+type Credentials = Record<"email" | "password", string> | undefined;
+
+type JWTArgs = {
+  token: JWT;
+  user?: User | undefined;
+};
+
+type SessionArgs = {
+  session: Session;
+  token: JWT;
+};
+
 export default NextAuth({
   providers: [
     CredentialsProvider({
       id: "credentials",
       credentials: { email: {}, password: {} },
-      async authorize(credentials) {
-        if (!credentials) {
-          throw new Error("CREDENTIALS MISSING");
-        }
+      async authorize(credentials: Credentials): Promise<User> {
+        if (!credentials) throw new Error("CREDENTIALS MISSING");
+
         await connectToMongoDB();
+
         const user: IUser = await Users.findOne({ email: credentials.email }).lean();
-        if (!user) {
-          console.log("user not in database");
-          throw new Error("Ce compte n'existe pas.");
-        }
+
+        if (!user) throw new Error("Ce compte n'existe pas.");
+
         const match = await compare(credentials.password, user.password || "");
-        if (!match) {
-          throw new Error("Votre mot passe n'est pas correct.");
-        }
-        return { email: user.email, userId: user._id, role: user.role };
+
+        if (!match) throw new Error("Votre mot passe n'est pas correct.");
+
+        return { email: user.email, id: user._id?.toString(), role: user.role };
       },
     }),
   ],
-  session: {
-    strategy: "jwt",
-    maxAge: 60 * 10,
-  },
+  session: { strategy: "jwt", maxAge: 60 * 10 },
   callbacks: {
-    jwt: async ({ token, user }: { token: JWT; user?: User | undefined }): Promise<JWT> => {
+    jwt: async (args: JWTArgs): Promise<JWT> => {
+      const { token, user } = args;
+
+      const newToken = { ...token };
+
       if (user) {
-        token.userId = user.userId;
-        token.role = user.role;
+        newToken.userId = user.id;
+        newToken.role = user.role;
       }
-      return token;
+
+      return newToken;
     },
-    session: async ({ session, token }: { session: Session; token: JWT }) => {
-      session.token = token;
-      return session;
+    session: async (args: SessionArgs): Promise<Session> => {
+      const { session, token } = args;
+
+      const newSession = { ...session };
+
+      newSession.token = token;
+
+      return newSession;
     },
   },
 });

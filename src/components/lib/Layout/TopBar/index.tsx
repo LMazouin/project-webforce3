@@ -2,14 +2,14 @@ import { signOut, useSession } from "next-auth/react";
 import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { DRAWER_WIDTH } from "../constants";
 import { useRouter } from "next/router";
+import { DRAWER_WIDTH } from "../constants";
 
 interface TopBarProps {
   handleMenuToggle: () => void;
 }
 
-const TopBar: React.FC<TopBarProps> = (props: TopBarProps): JSX.Element => {
+export default function TopBar(props: TopBarProps): JSX.Element {
   const router = useRouter();
   const { status, data } = useSession();
 
@@ -24,6 +24,8 @@ const TopBar: React.FC<TopBarProps> = (props: TopBarProps): JSX.Element => {
     await router.push({ pathname: "/authentication" });
   };
 
+  const { handleMenuToggle } = props;
+
   return (
     <AppBar position="fixed" sx={{ width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` }, ml: { sm: `${DRAWER_WIDTH}px` } }}>
       <Toolbar>
@@ -31,7 +33,7 @@ const TopBar: React.FC<TopBarProps> = (props: TopBarProps): JSX.Element => {
           color="inherit"
           aria-label="open side menu"
           edge="start"
-          onClick={props.handleMenuToggle}
+          onClick={handleMenuToggle}
           sx={{ mr: 2, display: { sm: "none" } }}
         >
           <MenuIcon />
@@ -48,6 +50,4 @@ const TopBar: React.FC<TopBarProps> = (props: TopBarProps): JSX.Element => {
       </Toolbar>
     </AppBar>
   );
-};
-
-export default TopBar;
+}

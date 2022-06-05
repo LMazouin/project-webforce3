@@ -8,7 +8,7 @@ interface LayoutProps {
   children: JSX.Element | JSX.Element[];
 }
 
-const Layout: React.FC<LayoutProps> = (props: LayoutProps): JSX.Element => {
+export default function Layout(props: LayoutProps): JSX.Element {
   const [open, setOpen] = useState<boolean>(false);
 
   const handleMenuToggle = (): void => {
@@ -20,16 +20,16 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps): JSX.Element => {
     { label: "Configuration", path: "/settings", authorizations: ["admin"] },
   ];
 
+  const { children } = props;
+
   return (
     <Box sx={{ display: "flex" }}>
       <TopBar handleMenuToggle={handleMenuToggle} />
       <SideMenu open={open} handleMenuToggle={handleMenuToggle} menuItems={menuItems} />
       <Box component="main" sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` } }}>
         <Toolbar />
-        {props.children}
+        {children}
       </Box>
     </Box>
   );
-};
-
-export default Layout;
+}

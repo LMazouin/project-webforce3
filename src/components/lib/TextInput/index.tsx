@@ -1,33 +1,41 @@
 import { Mail } from "@mui/icons-material";
 import { FormControl, FormHelperText, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
+import { ChangeEventHandler } from "react";
 
 interface TextInputProps {
   label: string;
   name: string;
   value: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onChange: ChangeEventHandler<HTMLInputElement>;
   error?: boolean;
-  helperText: string;
+  helperText?: string;
 }
 
-const TextInput: React.FunctionComponent<TextInputProps> = (props: TextInputProps): JSX.Element => (
-  <FormControl fullWidth>
-    <InputLabel>{props.label}</InputLabel>
-    <OutlinedInput
-      label={props.label}
-      name={props.name}
-      type="text"
-      value={props.value}
-      onChange={props.onChange}
-      error={props.error}
-      startAdornment={
-        <InputAdornment position="start">
-          <Mail />
-        </InputAdornment>
-      }
-    />
-    <FormHelperText>{props.helperText}</FormHelperText>
-  </FormControl>
-);
+export default function TextInput(props: TextInputProps): JSX.Element {
+  const { label, name, value, onChange, error, helperText } = props;
 
-export default TextInput;
+  return (
+    <FormControl fullWidth>
+      <InputLabel>{label}</InputLabel>
+      <OutlinedInput
+        label={label}
+        name={name}
+        type="text"
+        value={value}
+        onChange={onChange}
+        error={error}
+        startAdornment={
+          <InputAdornment position="start">
+            <Mail />
+          </InputAdornment>
+        }
+      />
+      <FormHelperText>{helperText}</FormHelperText>
+    </FormControl>
+  );
+}
+
+TextInput.defaultProps = {
+  error: "false",
+  helperText: "",
+};
