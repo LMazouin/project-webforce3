@@ -11,7 +11,7 @@
     "format": "prettier --write ./src"
   },
   "pre-commit": [
-    "format"
+    "lint"
   ],
   "engines": {
     "node": "16.15.0",
