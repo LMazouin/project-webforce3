@@ -39,19 +39,6 @@
       }
     ]
   },
-  "globals": {
-    "React": true,
-    "JSX": true
-  },
-  "settings": {
-    "import/parsers": {
-      "@typescript-eslint/parser": [".ts", ".tsx"]
-    },
-    "import/resolver": {
-      "typescript": {
-        "alwaysTryTypes": true,
-        "project": "."
-      }
-    }
-  }
+  "globals": {},
+  "settings": {}
 }
